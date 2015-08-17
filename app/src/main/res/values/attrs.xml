@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SpringIndicator">
+
+        <!--tab text color -->
+        <attr name="siTextColor" format="reference" />
+
+        <!--tab text color which is selected-->
+        <attr name="siSelectedTextColor" format="reference" />
+
+        <!--tab item bg -->
+        <attr name="siTextBg" format="reference" />
+
+        <!--tab text size-->
+        <attr name="siTextSize" format="dimension" />
+
+        <!--indicator bg color-->
+        <attr name="siIndicatorColor" format="reference" />
+
+        <!--indicator bg colors. should equals your titles count-->
+        <attr name="siIndicatorColors" format="reference" />
+
+        <!--max indicator radius-->
+        <attr name="siRadiusMax" format="dimension" />
+
+        <!--min indicator radius when moving-->
+        <attr name="siRadiusMin" format="dimension" />
+
+    </declare-styleable>
+
+    <declare-styleable name="stl_SmartTabLayout">
+        <attr name="stl_indicatorAlwaysInCenter" format="boolean" />
+        <attr name="stl_indicatorWithoutPadding" format="boolean" />
+        <attr name="stl_indicatorInFront" format="boolean" />
+        <attr name="stl_indicatorInterpolation" format="enum">
+            <enum name="smart" value="0" />
+            <enum name="linear" value="1" />
+        </attr>
+        <attr name="stl_indicatorGravity" format="enum">
+            <enum name="bottom" value="0" />
+            <enum name="top" value="1" />
+            <enum name="center" value="2" />
+        </attr>
+        <attr name="stl_indicatorColor" format="color" />
+        <attr name="stl_indicatorColors" format="reference" />
+        <attr name="stl_indicatorThickness" format="dimension" />
+        <attr name="stl_indicatorCornerRadius" format="dimension" />
+        <attr name="stl_overlineColor" format="color" />
+        <attr name="stl_overlineThickness" format="dimension" />
+        <attr name="stl_underlineColor" format="color" />
+        <attr name="stl_underlineThickness" format="dimension" />
+        <attr name="stl_dividerColor" format="color" />
+        <attr name="stl_dividerColors" format="reference" />
+        <attr name="stl_dividerThickness" format="dimension" />
+        <attr name="stl_defaultTabBackground" format="reference" />
+        <attr name="stl_defaultTabTextAllCaps" format="boolean" />
+        <attr name="stl_defaultTabTextColor" format="color|reference" />
+        <attr name="stl_defaultTabTextSize" format="dimension" />
+        <attr name="stl_defaultTabTextHorizontalPadding" format="dimension" />
+        <attr name="stl_defaultTabTextMinWidth" format="dimension" />
+        <attr name="stl_customTabTextLayoutId" format="reference" />
+        <attr name="stl_customTabTextViewId" format="reference" />
+        <attr name="stl_distributeEvenly" format="boolean" />
+        <attr name="stl_clickable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TabLayout">
+        <attr name="TabLayout_tabIndicatorHeight" format="dimension" />
+        <attr name="TabLayout_tabTextAppearance" format="reference" />
+        <attr name="TabLayout_tabPadding" format="dimension" />
+        <attr name="TabLayout_tabPaddingStart" format="dimension" />
+        <attr name="TabLayout_tabPaddingTop" format="dimension" />
+        <attr name="TabLayout_tabPaddingEnd" format="dimension" />
+        <attr name="TabLayout_tabPaddingBottom" format="dimension" />
+        <attr name="TabLayout_tabTextColor" format="color" />
+        <attr name="TabLayout_tabSelectedTextColor" format="color" />
+        <attr name="TabLayout_tabMinWidth" format="reference" />
+        <attr name="TabLayout_tabMaxWidth" format="dimension" />
+        <attr name="TabLayout_tabBackground" format="reference" />
+        <attr name="TabLayout_tabContentStart" format="reference" />
+        <attr name="TabLayout_tabMode" format="string" />
+        <attr name="TabLayout_tabIndicatorColor" format="color" />
+        <attr name="TabLayout_tabGravity" format="string" />
+    </declare-styleable>
+
+</resources>

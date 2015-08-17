@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scene_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="vbwbvwb"
+            android:textColor="@color/abc_search_url_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/text_view2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view1"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/accent_material_light"
+            android:text="bkdvkhskbvvkhsvb"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/secondScreenButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_view2"
+            android:layout_marginTop="20dp"
+            android:text="animate"
+            android:onClick="onButClick"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</LinearLayout>

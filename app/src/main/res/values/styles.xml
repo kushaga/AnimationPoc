@@ -1,0 +1,45 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
+        <item name="TabLayout_tabMaxWidth">20dp</item>
+        <item name="TabLayout_tabIndicatorColor">?attr/colorAccent</item>
+        <item name="TabLayout_tabIndicatorHeight">2dp</item>
+        <item name="TabLayout_tabPaddingStart">12dp</item>
+        <item name="TabLayout_tabPaddingEnd">12dp</item>
+        <item name="TabLayout_tabBackground">?attr/selectableItemBackground</item>
+        <item name="TabLayout_tabTextAppearance">@style/TextAppearance.Design.Tab</item>
+        <item name="TabLayout_tabSelectedTextColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Widget.Design.TabLayout" parent="Base.Widget.Design.TabLayout">
+        <item name="TabLayout_tabGravity">fill</item>
+        <item name="TabLayout_tabMode">fixed</item>
+    </style>
+
+    <style name="PagerTabsLayout" parent="Widget.Design.TabLayout">
+        <item name="TabLayout_tabTextAppearance">@style/PagerTabsTextAppearance</item>
+        >
+    </style>
+
+    <style name="PagerTabsTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.Design.Tab" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+</resources>
