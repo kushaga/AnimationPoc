@@ -64,6 +64,9 @@
         <attr name="stl_clickable" format="boolean" />
     </declare-styleable>
 
+<!--    <string name="appbar_scrolling_view_behavior" translatable="false">
+        android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string> -->
+
     <declare-styleable name="TabLayout">
         <attr name="TabLayout_tabIndicatorHeight" format="dimension" />
         <attr name="TabLayout_tabTextAppearance" format="reference" />

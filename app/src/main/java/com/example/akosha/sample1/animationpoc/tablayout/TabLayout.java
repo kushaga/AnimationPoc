@@ -21,6 +21,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,33 +88,36 @@ public class TabLayout extends HorizontalScrollView {
         this.setHorizontalScrollBarEnabled(false);
         this.setFillViewport(true);
         this.mTabStrip = new SlidingTabStrip(context);
-        this.addView(this.mTabStrip, 2, 1);
+        this.addView(this.mTabStrip, -2, -1);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TabLayout, defStyleAttr, R.style.Widget_Design_TabLayout);
         //this.mTabStrip.setSelectedIndicatorHeight(2);
-        //this.mTabStrip.setSelectedIndicatorHeight(a.getDimensionPixelSize(R.attr.TabLayout_tabIndicatorHeight, 0));
-        this.mTabStrip.setSelectedIndicatorColor(a.getColor(R.attr.TabLayout_tabIndicatorColor, 0));
-        this.mTabTextAppearance = a.getResourceId(R.attr.TabLayout_tabTextAppearance, R.style.TextAppearance_Design_Tab);
-        this.mTabPaddingStart = this.mTabPaddingTop = this.mTabPaddingEnd = this.mTabPaddingBottom = a.getDimensionPixelSize(R.attr.TabLayout_tabPadding, 0);
-        this.mTabPaddingStart = a.getDimensionPixelSize(R.attr.TabLayout_tabPaddingStart, this.mTabPaddingStart);
-        this.mTabPaddingTop = a.getDimensionPixelSize(R.attr.TabLayout_tabPaddingTop, this.mTabPaddingTop);
-        this.mTabPaddingEnd = a.getDimensionPixelSize(R.attr.TabLayout_tabPaddingEnd, this.mTabPaddingEnd);
-        this.mTabPaddingBottom = a.getDimensionPixelSize(R.attr.TabLayout_tabPaddingBottom, this.mTabPaddingBottom);
+        float height = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabIndicatorHeight, 0);
+        this.mTabStrip.setSelectedIndicatorHeight(a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabIndicatorHeight, 0));
+        this.mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.TabLayout_TabLayout_tabIndicatorColor, 0));
+        this.mTabTextAppearance = a.getResourceId(R.styleable.TabLayout_TabLayout_tabTextAppearance, R.style.TextAppearance_Design_Tab);
+        this.mTabPaddingStart = this.mTabPaddingTop = this.mTabPaddingEnd = this.mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabPadding, 0);
+        this.mTabPaddingStart = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabPaddingStart, this.mTabPaddingStart);
+        this.mTabPaddingTop = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabPaddingTop, this.mTabPaddingTop);
+        this.mTabPaddingEnd = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabPaddingEnd, this.mTabPaddingEnd);
+        this.mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabPaddingBottom, this.mTabPaddingBottom);
         this.mTabTextColors = this.loadTextColorFromTextAppearance(this.mTabTextAppearance);
-        if (a.hasValue(R.attr.TabLayout_tabTextColor)) {
-            this.mTabTextColors = a.getColorStateList(R.attr.TabLayout_tabTextColor);
+        if (a.hasValue(R.styleable.TabLayout_TabLayout_tabTextColor)) {
+            this.mTabTextColors = a.getColorStateList(R.styleable.TabLayout_TabLayout_tabTextColor);
         }
 
-        if (a.hasValue(R.attr.TabLayout_tabSelectedTextColor)) {
-            int selected = a.getColor(R.attr.TabLayout_tabSelectedTextColor, 0);
+        if (a.hasValue(R.styleable.TabLayout_TabLayout_tabSelectedTextColor)) {
+            int selected = a.getColor(R.styleable.TabLayout_TabLayout_tabSelectedTextColor, 0);
             this.mTabTextColors = createColorStateList(this.mTabTextColors.getDefaultColor(), selected);
         }
 
-        this.mTabMinWidth = a.getDimensionPixelSize(R.attr.TabLayout_tabMinWidth, 0);
-        this.mRequestedTabMaxWidth = a.getDimensionPixelSize(R.attr.TabLayout_tabMaxWidth, 0);
-        this.mTabBackgroundResId = a.getResourceId(R.attr.TabLayout_tabBackground, 0);
-        this.mContentInsetStart = a.getDimensionPixelSize(R.attr.TabLayout_tabContentStart, 0);
-        this.mMode = a.getInt(R.attr.TabLayout_tabMode, 1);
-        this.mTabGravity = a.getInt(R.attr.TabLayout_tabGravity, 0);
+        this.mTabMinWidth = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabMinWidth, 0);
+        this.mRequestedTabMaxWidth = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabMaxWidth, 0);
+        this.mTabBackgroundResId = a.getResourceId(R.styleable.TabLayout_TabLayout_tabBackground, 0);
+        this.mContentInsetStart = a.getDimensionPixelSize(R.styleable.TabLayout_TabLayout_tabContentStart, 0);
+        //this.mMode = a.getInt(R.styleable.TabLayout_TabLayout_tabMode, 1);
+        this.mMode = MODE_FIXED;
+        //this.mTabGravity = a.getInt(R.styleable.TabLayout_TabLayout_tabGravity, 0);
+        this.mTabGravity = Gravity.FILL;
         a.recycle();
         this.applyModeAndGravity();
     }

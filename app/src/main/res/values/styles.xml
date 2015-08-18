@@ -13,10 +13,10 @@
 
     <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
         <item name="TabLayout_tabMaxWidth">20dp</item>
-        <item name="TabLayout_tabIndicatorColor">?attr/colorAccent</item>
+        <item name="TabLayout_tabIndicatorColor">#57A9FF</item>
         <item name="TabLayout_tabIndicatorHeight">2dp</item>
-        <item name="TabLayout_tabPaddingStart">12dp</item>
-        <item name="TabLayout_tabPaddingEnd">12dp</item>
+        <item name="TabLayout_tabPaddingStart">0dp</item>
+        <item name="TabLayout_tabPaddingEnd">0dp</item>
         <item name="TabLayout_tabBackground">?attr/selectableItemBackground</item>
         <item name="TabLayout_tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="TabLayout_tabSelectedTextColor">?android:textColorPrimary</item>
