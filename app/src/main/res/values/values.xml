@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="appbar_scrolling_view_behavior" translatable="false">
-        android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+        com.example.akosha.sample1.animationpoc.tablayout.AppBarLayout$ScrollingViewBehavior</string>
 
     <declare-styleable name="CoordinatorLayout">
         <attr name="keylines" format="reference" />

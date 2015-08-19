@@ -1,13 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.akosha.sample1.animationpoc.Activity7">
+    tools:context="com.example.akosha.sample1.animationpoc.Activity7"
+    android:orientation="vertical">
 
     <com.example.akosha.sample1.animationpoc.tablayout.TabLayout
         android:id="@+id/tabs"
-        style="@style/PagerTabsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:TabLayout_tabIndicatorColor="@color/theme_accent"
@@ -20,4 +20,5 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-</RelativeLayout>
+
+</LinearLayout>

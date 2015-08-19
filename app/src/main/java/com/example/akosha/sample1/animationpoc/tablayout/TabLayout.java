@@ -750,7 +750,8 @@ public class TabLayout extends HorizontalScrollView {
 
         protected void onDraw(Canvas canvas) {
             if (this.mIndicatorLeft >= 0 && this.mIndicatorRight > this.mIndicatorLeft) {
-                canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight), (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
+                canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight),
+                        (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
             }
 
         }

@@ -17,12 +17,11 @@ public class Activity7 extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         LandingTabAdapter adapter = new LandingTabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        //tabLayout.setTabTextColors(getResources().getColor(R.color.theme_default_primary_dark), getResources().getColor(R.color.theme_accent));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.theme_default_primary_dark), getResources().getColor(R.color.theme_accent));
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabTextColors(getResources().getColor(R.color.theme_default_primary_dark), getResources().getColor(R.color
-                .theme_accent));
+
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
