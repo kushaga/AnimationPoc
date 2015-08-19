@@ -20,6 +20,7 @@ public class Activity7 extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setTabTextColors(getResources().getColor(R.color.theme_default_primary_dark), getResources().getColor(R.color.theme_accent));
+        tabLayout.setRadius(8,4);
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);

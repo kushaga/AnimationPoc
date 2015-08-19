@@ -11,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
@@ -35,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.akosha.sample1.animationpoc.Point;
 import com.example.akosha.sample1.animationpoc.R;
 import com.example.akosha.sample1.animationpoc.tablayout.ValueAnimatorCompat.AnimatorUpdateListener;
 
@@ -73,6 +75,9 @@ public class TabLayout extends HorizontalScrollView {
     private int mMode;
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener;
     private OnClickListener mTabClickListener;
+    private float radiusMax, radiusMin, radiusOffset;
+    private float headMoveOffset = 0.6f;
+    private float acceleration = 0.5f;
 
     public TabLayout(Context context) {
         this(context, (AttributeSet) null);
@@ -118,6 +123,8 @@ public class TabLayout extends HorizontalScrollView {
         this.mMode = MODE_FIXED;
         //this.mTabGravity = a.getInt(R.styleable.TabLayout_TabLayout_tabGravity, 0);
         this.mTabGravity = Gravity.FILL;
+        setRadius(0, 0);
+        radiusOffset = radiusMax - radiusMin;
         a.recycle();
         this.applyModeAndGravity();
     }
@@ -133,6 +140,11 @@ public class TabLayout extends HorizontalScrollView {
 
             }
         }
+    }
+
+    public void setRadius(float radiusMax, float radiusMin) {
+        this.radiusMax = radiusMax;
+        this.radiusMin = radiusMin;
     }
 
     public void addTab(TabLayout.Tab tab) {
@@ -572,6 +584,38 @@ public class TabLayout extends HorizontalScrollView {
 
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             TabLayout tabLayout = (TabLayout) this.mTabLayoutRef.get();
+
+            if (position < tabLayout.mTabStrip.getChildCount() - 1) {
+
+                float radiusOffsetHead = 0.5f;
+                if (positionOffset < radiusOffsetHead) {
+                    tabLayout.mTabStrip.headPoint.setRadius(Math.max(tabLayout.radiusMin, 0));//todo set value for radiusMin
+                } else {
+                    tabLayout.mTabStrip.headPoint.setRadius(((positionOffset - radiusOffsetHead) / (1 - radiusOffsetHead) * tabLayout.radiusOffset + tabLayout.radiusMin));
+                }
+                float radiusOffsetFoot = 0.5f;
+                if (positionOffset < radiusOffsetFoot) {
+                    tabLayout.mTabStrip.footPoint.setRadius((1 - positionOffset / radiusOffsetFoot) * tabLayout.radiusOffset + tabLayout.radiusMin);
+                } else {
+                    tabLayout.mTabStrip.footPoint.setRadius(tabLayout.radiusMin);
+                }
+
+                float headX = 1f;
+                if (positionOffset < tabLayout.headMoveOffset) {
+                    float positionOffsetTemp = positionOffset / tabLayout.headMoveOffset;
+                    headX = (float) ((Math.atan(positionOffsetTemp * tabLayout.acceleration * 2 - tabLayout.acceleration) + (Math.atan(tabLayout.acceleration))) / (2 * (Math.atan(tabLayout.acceleration))));
+                }
+
+                // reset radius
+                if (positionOffset == 0) {
+                    tabLayout.mTabStrip.headPoint.setRadius(tabLayout.radiusMax);
+                    tabLayout.mTabStrip.footPoint.setRadius(tabLayout.radiusMax);
+                }
+            } else {
+                tabLayout.mTabStrip.headPoint.setRadius(tabLayout.radiusMax);
+                tabLayout.mTabStrip.footPoint.setRadius(tabLayout.radiusMax);
+            }
+
             if (tabLayout != null) {
                 tabLayout.setScrollPosition(position, positionOffset, this.mScrollState == 1);
             }
@@ -594,11 +638,19 @@ public class TabLayout extends HorizontalScrollView {
         private float mSelectionOffset;
         private int mIndicatorLeft = -1;
         private int mIndicatorRight = -1;
+        Point headPoint = new Point();
+        Point footPoint = new Point();
+        Path path = new Path();
+        Paint paint = new Paint();
+
 
         SlidingTabStrip(Context context) {
             super(context);
             this.setWillNotDraw(false);
             this.mSelectedIndicatorPaint = new Paint();
+            paint.setAntiAlias(true);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            paint.setStrokeWidth(1);
         }
 
         void setSelectedIndicatorColor(int color) {
@@ -619,6 +671,14 @@ public class TabLayout extends HorizontalScrollView {
             }
         }
 
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+            super.onLayout(changed, l, t, r, b);
+            if (!TabLayout.isAnimationRunning(this.getAnimation())) {
+                this.updateIndicatorPosition();
+            }
+
+        }
+
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
@@ -630,7 +690,7 @@ public class TabLayout extends HorizontalScrollView {
 
                     int i;
                     View child;
-                    for (i = count; gutter < i; ++gutter) {
+                    for (i = count; gutter < i; ++gutter) { //set the max width of the rectangle according to the largest text view added
                         child = this.getChildAt(gutter);
                         child.measure(unspecifiedSpec, heightMeasureSpec);
                         largestTabWidth = Math.max(largestTabWidth, child.getMeasuredWidth());
@@ -659,15 +719,7 @@ public class TabLayout extends HorizontalScrollView {
             }
         }
 
-        protected void onLayout(boolean changed, int l, int t, int r, int b) {
-            super.onLayout(changed, l, t, r, b);
-            if (!TabLayout.isAnimationRunning(this.getAnimation())) {
-                this.updateIndicatorPosition();
-            }
-
-        }
-
-        private void updateIndicatorPosition() {
+        private void updateIndicatorPosition() { //update indicator position to the next scrolled location according to the viewpager scrolled
             View selectedTitle = this.getChildAt(this.mSelectedPosition);
             int left;
             int right;
@@ -691,16 +743,16 @@ public class TabLayout extends HorizontalScrollView {
             if (left != this.mIndicatorLeft || right != this.mIndicatorRight) {
                 this.mIndicatorLeft = left;
                 this.mIndicatorRight = right;
-                ViewCompat.postInvalidateOnAnimation(this);
+                ViewCompat.postInvalidateOnAnimation(this); //invalidate on the next animation instance , on a non-ui thread
             }
 
         }
 
         void animateIndicatorToPosition(final int position, int duration) {
             boolean isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL;
-            View targetView = this.getChildAt(position);
-            final int targetLeft = targetView.getLeft();
-            final int targetRight = targetView.getRight();
+            View targetView = this.getChildAt(position); //next view
+            final int targetLeft = targetView.getLeft(); // next view left start
+            final int targetRight = targetView.getRight(); // next view right end
             final int startLeft;
             final int startRight;
             if (Math.abs(position - this.mSelectedPosition) <= 1) {
@@ -722,6 +774,7 @@ public class TabLayout extends HorizontalScrollView {
             }
 
             if (startLeft != targetLeft || startRight != targetRight) {
+                //set head-point and foot-point x and y here respectively
                 ValueAnimatorCompat animator1 = ViewUtils.createAnimator();
                 animator1.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
                 animator1.setDuration(duration);
@@ -729,6 +782,10 @@ public class TabLayout extends HorizontalScrollView {
                 animator1.setUpdateListener(new AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimatorCompat animator) {
                         float fraction = animator.getAnimatedFraction();
+                        footPoint.setX((mIndicatorLeft + mIndicatorRight) / 2);
+                        footPoint.setY(getHeight() - mSelectedIndicatorHeight);
+                        headPoint.setX((AnimationUtils.lerp(startLeft, targetLeft, fraction) + AnimationUtils.lerp(startRight, targetRight, fraction)) / 2);
+                        headPoint.setY(getHeight() - mSelectedIndicatorHeight);
                         SlidingTabStrip.this.setIndicatorPosition(AnimationUtils.lerp(startLeft, targetLeft, fraction), AnimationUtils.lerp(startRight, targetRight, fraction));
                     }
                 });
@@ -748,10 +805,46 @@ public class TabLayout extends HorizontalScrollView {
 
         }
 
+        private void makePath() {
+
+            //on screen change animate line (/curve)
+            float headOffsetX = (float) (headPoint.getRadius() * Math.sin(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() + headPoint.getX()))));//curve equation x-co-ordinate
+            float headOffsetY = (float) (headPoint.getRadius() * Math.cos(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));//curve equation y-co-ordinate
+
+            float footOffsetX = (float) (footPoint.getRadius() * Math.sin(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
+            float footOffsetY = (float) (footPoint.getRadius() * Math.cos(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
+
+            float x1 = headPoint.getX() - headOffsetX;
+            float y1 = headPoint.getY() + headOffsetY; //transition offset
+
+            float x2 = headPoint.getX() + headOffsetX;
+            float y2 = headPoint.getY() - headOffsetY;
+
+            float x3 = footPoint.getX() - footOffsetX;
+            float y3 = footPoint.getY() + footOffsetY;
+
+            float x4 = footPoint.getX() + footOffsetX;
+            float y4 = footPoint.getY() - footOffsetY;
+
+            float anchorX = (footPoint.getX() + headPoint.getX()) / 2;
+            float anchorY = (footPoint.getY() + headPoint.getY()) / 2;
+
+            path.reset();
+            path.moveTo(x1, y1);
+            path.quadTo(anchorX, anchorY, x3, y3);
+            path.lineTo(x4, y4);
+            path.quadTo(anchorX, anchorY, x2, y2);
+            path.lineTo(x1, y1);
+        }
+
+
         protected void onDraw(Canvas canvas) {
             if (this.mIndicatorLeft >= 0 && this.mIndicatorRight > this.mIndicatorLeft) {
-                canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight),
-                        (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
+                makePath();
+                canvas.drawPath(path,this.mSelectedIndicatorPaint);
+                //canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight), (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
+                canvas.drawCircle((this.mIndicatorLeft + this.mIndicatorRight) / 2, (this.getHeight() - this.mSelectedIndicatorHeight), headPoint.getRadius(), this.mSelectedIndicatorPaint);
+                canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), this.mSelectedIndicatorPaint);
             }
 
         }
