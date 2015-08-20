@@ -99,7 +99,6 @@ public class SpringIndicator extends FrameLayout {
 
     private void addParentView() {
         //addView(scrollView);
-
         allLayout = new LinearLayout(getContext());//add the two layouts in this layout
         allLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f));
         allLayout.setOrientation(LinearLayout.VERTICAL);

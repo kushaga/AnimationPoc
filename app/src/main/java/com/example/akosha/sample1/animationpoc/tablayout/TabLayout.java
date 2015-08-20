@@ -579,10 +579,12 @@ public class TabLayout extends HorizontalScrollView {
             this.mTabLayoutRef = new WeakReference(tabLayout);
         }
 
+        @Override
         public void onPageScrollStateChanged(int state) {
             this.mScrollState = state;
         }
 
+        @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             TabLayout tabLayout = (TabLayout) this.mTabLayoutRef.get();
 
@@ -590,7 +592,7 @@ public class TabLayout extends HorizontalScrollView {
 
                 float radiusOffsetHead = 0.5f;
                 if (positionOffset < radiusOffsetHead) {
-                    tabLayout.mTabStrip.headPoint.setRadius(Math.max(tabLayout.radiusMin, 0));//todo set value for radiusMin
+                    tabLayout.mTabStrip.headPoint.setRadius(Math.max(tabLayout.radiusMin, 0));
                 } else {
                     tabLayout.mTabStrip.headPoint.setRadius(((positionOffset - radiusOffsetHead) / (1 - radiusOffsetHead) * tabLayout.radiusOffset + tabLayout.radiusMin));
                 }
@@ -604,7 +606,8 @@ public class TabLayout extends HorizontalScrollView {
                 float headX = 1f;
                 if (positionOffset < tabLayout.headMoveOffset) {
                     float positionOffsetTemp = positionOffset / tabLayout.headMoveOffset;
-                    headX = (float) ((Math.atan(positionOffsetTemp * tabLayout.acceleration * 2 - tabLayout.acceleration) + (Math.atan(tabLayout.acceleration))) / (2 * (Math.atan(tabLayout.acceleration))));
+                    headX = (float) ((Math.atan(positionOffsetTemp * tabLayout.acceleration * 2 - tabLayout.acceleration) +
+                            (Math.atan(tabLayout.acceleration))) / (2 * (Math.atan(tabLayout.acceleration))));
                 }
 
                 // reset radius
@@ -623,6 +626,7 @@ public class TabLayout extends HorizontalScrollView {
 
         }
 
+        @Override
         public void onPageSelected(int position) {
             TabLayout tabLayout = (TabLayout) this.mTabLayoutRef.get();
             if (tabLayout != null) {
@@ -641,17 +645,15 @@ public class TabLayout extends HorizontalScrollView {
         private int mIndicatorRight = -1;
         Point headPoint = new Point();
         Point footPoint = new Point();
-        Path path = new Path();
-        Paint paint = new Paint();
-
+        Path path;
+        boolean onInflate = false;
 
         SlidingTabStrip(Context context) {
             super(context);
             this.setWillNotDraw(false);
             this.mSelectedIndicatorPaint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-            paint.setStrokeWidth(1);
+            onInflate = true;
+            path = new Path();
         }
 
         void setSelectedIndicatorColor(int color) {
@@ -779,9 +781,9 @@ public class TabLayout extends HorizontalScrollView {
                 ValueAnimatorCompat animator1 = ViewUtils.createAnimator();
                 //animator1.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
                 animator1.setDuration(duration);
-                //animator1.setFloatValues(0.0F, 1.0F);
-                animator1.setFloatValues(0.2f, 1f);
-                animator1.setDuration(500);
+                animator1.setFloatValues(0.0F, 1.0F);
+                //animator1.setFloatValues(0.2f, 1f);
+                animator1.setDuration(800);
                 animator1.setInterpolator(new OvershootInterpolator());
 
                 animator1.setUpdateListener(new AnimatorUpdateListener() {
@@ -842,16 +844,21 @@ public class TabLayout extends HorizontalScrollView {
             path.lineTo(x1, y1);
         }
 
-
+        @Override
         protected void onDraw(Canvas canvas) {
             if (this.mIndicatorLeft >= 0 && this.mIndicatorRight > this.mIndicatorLeft) {
                 makePath();
                 canvas.drawPath(path, this.mSelectedIndicatorPaint);
                 //canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight), (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
                 canvas.drawCircle((this.mIndicatorLeft + this.mIndicatorRight) / 2, (this.getHeight() - this.mSelectedIndicatorHeight), headPoint.getRadius(), this.mSelectedIndicatorPaint);
-                canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), this.mSelectedIndicatorPaint);
+                if (onInflate) {
+                    canvas.drawCircle((this.mIndicatorLeft + this.mIndicatorRight) / 2, (this.getHeight() - this.mSelectedIndicatorHeight), headPoint.getRadius(), this.mSelectedIndicatorPaint);
+                    onInflate = false;
+                } else {
+                    canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), this.mSelectedIndicatorPaint);
+                }
             }
-            super.onDraw(canvas);
+            //super.onDraw(canvas);
         }
     }
 
@@ -886,7 +893,6 @@ public class TabLayout extends HorizontalScrollView {
                     this.mIconView.setSelected(selected);
                 }
             }
-
         }
 
         @TargetApi(14)
@@ -908,7 +914,6 @@ public class TabLayout extends HorizontalScrollView {
             } else if (TabLayout.this.mTabMinWidth > 0 && this.getMeasuredHeight() < TabLayout.this.mTabMinWidth) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(TabLayout.this.mTabMinWidth, MeasureSpec.EXACTLY), heightMeasureSpec);
             }
-
         }
 
         final void update() {
