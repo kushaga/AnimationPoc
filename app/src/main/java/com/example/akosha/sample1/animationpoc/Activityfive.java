@@ -53,7 +53,7 @@ class LandingTabAdapter extends FragmentPagerAdapter {
 
     private static final int COUNT = 6;
 
-    private String[] title = {"Companies", "Explore", "Messages", "Companies1", "Explore1", "Messages1"};
+    private String[] title = {"Companies", "Explore", "Messages", "Companies1", "Explore1", "Messages1", "Explore1", "Messages1"};
 
 
     public LandingTabAdapter(FragmentManager fm) {
@@ -86,6 +86,12 @@ class LandingTabAdapter extends FragmentPagerAdapter {
                 break;
             case 5:
                 fragment = new Screenthree.Card2();
+                break;
+            case 6:
+                fragment = new Screenthree.Card2();
+                break;
+            case 7:
+                fragment = new Fragment1();
         }
         return fragment;
     }

@@ -30,6 +30,7 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -776,9 +777,13 @@ public class TabLayout extends HorizontalScrollView {
             if (startLeft != targetLeft || startRight != targetRight) {
                 //set head-point and foot-point x and y here respectively
                 ValueAnimatorCompat animator1 = ViewUtils.createAnimator();
-                animator1.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+                //animator1.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
                 animator1.setDuration(duration);
-                animator1.setFloatValues(0.0F, 1.0F);
+                //animator1.setFloatValues(0.0F, 1.0F);
+                animator1.setFloatValues(0.2f, 1f);
+                animator1.setDuration(500);
+                animator1.setInterpolator(new OvershootInterpolator());
+
                 animator1.setUpdateListener(new AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimatorCompat animator) {
                         float fraction = animator.getAnimatedFraction();
@@ -841,12 +846,12 @@ public class TabLayout extends HorizontalScrollView {
         protected void onDraw(Canvas canvas) {
             if (this.mIndicatorLeft >= 0 && this.mIndicatorRight > this.mIndicatorLeft) {
                 makePath();
-                canvas.drawPath(path,this.mSelectedIndicatorPaint);
+                canvas.drawPath(path, this.mSelectedIndicatorPaint);
                 //canvas.drawRect((float) this.mIndicatorLeft, (float) (this.getHeight() - this.mSelectedIndicatorHeight), (float) this.mIndicatorRight, (float) this.getHeight(), this.mSelectedIndicatorPaint);
                 canvas.drawCircle((this.mIndicatorLeft + this.mIndicatorRight) / 2, (this.getHeight() - this.mSelectedIndicatorHeight), headPoint.getRadius(), this.mSelectedIndicatorPaint);
                 canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), this.mSelectedIndicatorPaint);
             }
-
+            super.onDraw(canvas);
         }
     }
 

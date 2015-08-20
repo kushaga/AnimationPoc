@@ -93,8 +93,8 @@ public class SpringView extends View {
         makePath();
         canvas.drawPath(path, paint);
         //drawn 2 circles for header and footer
-        canvas.drawCircle(headPoint.getX(), headPoint.getY() , headPoint.getRadius(), paint);
-        canvas.drawCircle(footPoint.getX(), footPoint.getY() , footPoint.getRadius(), paint);
+        canvas.drawCircle(headPoint.getX(), headPoint.getY(), headPoint.getRadius(), paint);
+        canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), paint);
         super.onDraw(canvas);
     }
 
